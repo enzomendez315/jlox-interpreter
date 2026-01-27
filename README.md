@@ -1,9 +1,7 @@
 # Building A Tree-Walk Interpreter
-This program is an interpreter for a custom scripting language called Lox. Lox is a high-level, dynamically-typed[^1] language like Python or PHP. Since Lox is a scripting language, it executes directly from source.
+This program is an interpreter for a custom scripting language called Lox. Lox is a high-level, dynamically-typed language like Python or PHP. Since Lox is a scripting language, it executes directly from source.
 
 The main difference between a compiler and an interpreter is that a compiler only translates source code to some other form. It does not execute it. The user has to take the resulting output and run it themselves. On the other hand, an interpreter takes in source code and executes it immediately. In that regard, we can think of the compiler as a pipeline where each stage's job is to organize the data representing the user's code in a way that makes the next stage simpler to implement.
-
-For this project, I used a book called Crafting Interpreters by Robert Nystrom, where an interpreter is built from the ground up.[^2] It is ideal to get a better understanding of how high-level languages are implemented, and what goes through the creation of an interpreter using popular programming languages like Java or C++. This is a project to document what I learned.
 
 # Lox Documentation
 This reference manual describes the Lox programming language implemented in Java.
@@ -280,10 +278,3 @@ Since this interpreter can only run on platforms that Java supports, there can b
 The speed of the program is also an issue, since even simple expressions like `1 + 2` need to be scanned, parsed, and then traversed using pointers in order to get the syntax from the abstract syntax tree nodes. Not to mention the overhead cost of all those pointers, as each one adds 32 or 64 bits of overhead to the object.
 
 Another disadvantage is that the interpreter stores data across the heap as a loosely connected web of objects. And in order for the CPU to use the cache so that data can be loaded more quickly, there have to be little bundles of bytes that are adjacent to each other. But this is difficult to do given this particular implementation of the interpreter. In the current implementation, every step the tree-walker takes to follow a reference to a child node may step outside the bounds of the cache, and force the CPU to stall until a new lump of data can be stored from RAM. In addition, the overhead of the tree nodes (the pointers and the headers) tend to push objects away from each other and out of the cache.
-
-So while this implementation of an interpreter was more beginner-friendly and straightforward, the solution would be to create a new implementation that compiles directly to the native instruction set the chip supports. Here's the implementation for a [virtual machine](https://github.com/enzomendez315/clox-vm) written in C using bytecode.
-
-
-[^1]: Dynamically-typed means that the interpreter assigns variables a type at runtime based on the variable's value. This is different from a statically-typed language like Java or C++, where variable types are known at compile time.
-
-[^2]: https://craftinginterpreters.com/contents.html
